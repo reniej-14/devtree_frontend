@@ -19,8 +19,7 @@ export const createAccount = async (formData: RegisterForm) => {
 export const login = async (formData: LoginForm) => {
     try {
         const { data } = await api.post<string>('/auth/login', formData)
-        toast.success(data)
-        return data
+        localStorage.setItem('AUTH_TOKEN', data)
     } catch (error) {
         if (isAxiosError(error) && error.response) {
             toast.error(error.response.data.error)
