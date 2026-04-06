@@ -1,7 +1,7 @@
 import { isAxiosError } from "axios";
 import { toast} from 'sonner'
 import api from "../lib/axios";
-import type { LoginForm, RegisterForm, User } from "../types";
+import type { LoginForm, ProfileForm, RegisterForm, User } from "../types";
 
 export const createAccount = async (formData: RegisterForm) => {
     try {
@@ -31,6 +31,17 @@ export const login = async (formData: LoginForm) => {
 export const getUser = async () => {
     try {
         const { data } = await api<User>('/user')
+        return(data)
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error)
+        }
+    }
+}
+
+export const updateProfile = async (formData: ProfileForm) => {
+    try {
+        const { data } = await api.patch<string>('/user', formData)
         return(data)
     } catch (error) {
         if (isAxiosError(error) && error.response) {
