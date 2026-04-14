@@ -1,7 +1,7 @@
 import { isAxiosError } from "axios";
 import { toast} from 'sonner'
 import api from "../lib/axios";
-import type { LoginForm, ProfileForm, RegisterForm, User } from "../types";
+import type { LoginForm, RegisterForm, User } from "../types";
 
 export const createAccount = async (formData: RegisterForm) => {
     try {
@@ -39,7 +39,7 @@ export const getUser = async () => {
     }
 }
 
-export const updateProfile = async (formData: ProfileForm) => {
+export const updateProfile = async (formData: User) => {
     try {
         const { data } = await api.patch<string>('/user', formData)
         return(data)
