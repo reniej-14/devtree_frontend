@@ -38,16 +38,10 @@ export default function LinkTreeView() {
 
   const handlerUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedLinks = devTreeLinks.map(link => link.name === e.target.name ? {...link, url: e.target.value} : link)
-    console.log(updatedLinks)
     setDevtreeLinks(updatedLinks)
-
-    queryClient.setQueryData(['user'], (prevData: User) => {
-      return {
-        ...prevData,
-        links: JSON.stringify(updatedLinks)
-      }
-    })
   }
+
+  const links : SocialNetwork[] = JSON.parse(user.links)
 
   const handlerEnableLink = (socialNetwork: string) => {
     const updatedLinks = devTreeLinks.map(link => {
@@ -62,10 +56,25 @@ export default function LinkTreeView() {
     })
     setDevtreeLinks(updatedLinks)
 
+    let updatedItems : SocialNetwork[] = []
+    const selectedSocialNetwork = updatedLinks.find(link => link.name === socialNetwork)
+    if (selectedSocialNetwork?.enabled) {
+      const newItem = {
+        ...selectedSocialNetwork,
+        id: links.length + 1
+      }
+      updatedItems = [...links, newItem]
+    } else {
+      console.log('Deshabilitando')
+    }
+
+    console.log(updatedItems)
+    
+    // Almacenar en la base de datos
     queryClient.setQueryData(['user'], (prevData: User) => {
       return {
         ...prevData,
-        links: JSON.stringify(updatedLinks)
+        links: JSON.stringify(updatedItems)
       }
     })
   }
