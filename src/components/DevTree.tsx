@@ -48,7 +48,7 @@ export default function DevTree({data}: DevTreeProps) {
                     </div>
 
                     <div className="flex flex-col md:flex-row gap-10 mt-10">
-                        <div className="flex-1 ">
+                        <div className="flex-1">
                             <Outlet />
                         </div>
                         <div className="w-full md:w-96 bg-slate-800 px-5 py-10 space-y-6">
@@ -63,7 +63,7 @@ export default function DevTree({data}: DevTreeProps) {
 
                             <p className='text-center text-lg font-black text-white'>{data.description}</p>
 
-                            <div className='mt-20 flex flex-col'>
+                            <div className='mt-10 flex flex-col space-y-5'>
                                 {enabledLinks.map(link => (
                                     <DevTreeLink 
                                         key={link.name}
