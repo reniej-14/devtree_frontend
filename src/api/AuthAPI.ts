@@ -1,7 +1,7 @@
 import { isAxiosError } from "axios";
 import { toast} from 'sonner'
 import api from "../lib/axios";
-import type { LoginForm, RegisterForm, User } from "../types";
+import type { LoginForm, RegisterForm, User, UserHandle } from "../types";
 
 export const createAccount = async (formData: RegisterForm) => {
     try {
@@ -56,6 +56,17 @@ export const uploadImage = async (file: File) => {
     try {
         const { data } = await api.post('/user/image', formData)
         return data
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error)
+        }
+    }
+}
+
+export const getUserByHandle = async (handle: string) => {
+    try {
+        const { data } = await api<UserHandle>(`/${handle}`)
+        return(data)
     } catch (error) {
         if (isAxiosError(error) && error.response) {
             throw new Error(error.response.data.error)
