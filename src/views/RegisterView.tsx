@@ -1,14 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../components/ErrorMessage";
 import type { RegisterForm } from "../types";
 import { createAccount } from "../api/AuthAPI";
+import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
 
 export default function RegisterView() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
   const initialValues = {
     name: '',
     email: '',
-    handle: '',
+    handle: location?.state?.handle || '',
     password: '',
     password_confirmation: ''
   }
@@ -17,9 +22,20 @@ export default function RegisterView() {
 
   const password = watch('password')
 
+  const { mutate } = useMutation({
+    mutationFn: createAccount,
+    onError: (error) => {
+      toast.error(error.message)
+    },
+    onSuccess: (data) => {
+      toast.success(data)
+      reset()
+      navigate('/auth/login')
+    }
+  })
+
   const handleRegister = (formData : RegisterForm) => {
-    createAccount(formData)
-    reset()
+    mutate(formData)
   }
 
   return (

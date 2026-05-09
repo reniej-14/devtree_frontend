@@ -1,16 +1,13 @@
 import { isAxiosError } from "axios";
-import { toast} from 'sonner'
 import api from "../lib/axios";
 import type { LoginForm, RegisterForm, User, UserHandle } from "../types";
 
 export const createAccount = async (formData: RegisterForm) => {
     try {
         const { data } = await api.post<string>('/auth/register', formData)
-        toast.success(data)
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
-            toast.error(error.response.data.error)
             throw new Error(error.response.data.error)
         }
     }
@@ -20,9 +17,9 @@ export const login = async (formData: LoginForm) => {
     try {
         const { data } = await api.post<string>('/auth/login', formData)
         localStorage.setItem('AUTH_TOKEN', data)
+        return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
-            toast.error(error.response.data.error)
             throw new Error(error.response.data.error)
         }
     }
@@ -67,6 +64,17 @@ export const getUserByHandle = async (handle: string) => {
     try {
         const { data } = await api<UserHandle>(`/${handle}`)
         return(data)
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error)
+        }
+    }
+}
+
+export const searchByHandle = async (handle: string) => {
+    try {
+        const { data } = await api.post<string>('/search', {handle})
+        return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
             throw new Error(error.response.data.error)
